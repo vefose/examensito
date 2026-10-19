@@ -4,7 +4,8 @@ PROMPT: APP DE ANDROID STUDIO CON EL ESTILO EXACTO DEL PROGRAMADOR
 
 LA APP QUE QUIERO:
 >>> [ESCRIBE AQUI QUE DEBE HACER LA APP. Ej: "4 fragments: suma, resta,
->>> multiplicacion y division, con una clase para las operaciones"] <<<
+>>> multiplicacion y division, con una clase para las operaciones", o
+>>> "menupuntitos: menu con iconos + 2 cuadros de texto y su clase"] <<<
 
 Hazla en Android Studio respetando AL PIE DE LA LETRA todas las reglas de
 abajo. El codigo tiene que verse escrito a mano por un estudiante con un
@@ -288,16 +289,153 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   y en cada rama: sumitas fragmentito = new sumitas(); reemplazafragmento(fragmentito);
 
 ---------------------------------------------------------------------
-8. MENU (res/menu/menusito.xml, si aplica)
+8. MENU DE OPCIONES CON ICONOS ("menupuntitos"), si aplica
 ---------------------------------------------------------------------
-- 4 items con icono PNG propio (@drawable/suma, resta, multiplicacion,
-  division) y app:showAsAction="always", y OTROS 4 items DUPLICADOS solo de
-  texto con app:showAsAction="ifRoom". Ids de los duplicados con Mayuscula
-  (Sumita, Restita) o con otra palabra (Multiplica, Divide).
-- Titulos en minuscula en los de icono ("suma", "resta", "multiplicación",
-  "division") y con mayuscula en los de texto ("Suma", "Resta").
-- Atributos en orden id, title, icon, showAsAction; el "/>" en su propia
-  linea; dos lineas en blanco antes de </menu>.
+Es la practica del profe "MyAmenupuntitosnuevo" (iconos en la barra de
+arriba + menu de 3 puntitos). Puede venir en dos versiones:
+  (A) la BASE del profe: solo el menu y un Toast "fue en suma".
+  (B) el EJERCICIO COMPLETO: "Complementa el ejercicio poniendo dos cuadros
+      de texto y su correspondiente clase y sus metodos de suma, resta,
+      multiplicacion y division; al seleccionar cualquier icono o cualquier
+      opcion del menu despliega el resultado correspondiente."
+Si piden el ejercicio, entrega la (B), que es la (A) mas lo de abajo.
+
+PASOS EN ANDROID STUDIO (asi se crean los archivos):
+  1. themes.xml: quitar ".NoActionBar" del parent ->
+       parent="Theme.Material3.DayNight"  (si no, no sale la barra del menu).
+  2. Click derecho en res -> New -> Android Resource File -> File name:
+     menusito, Resource type: Menu -> OK (crea res/menu/menusito.xml).
+  3. Pegar 4 PNG bajados de internet en res/drawable. Nombres:
+       version del profe:  sumar.png, restar.png, multiplicar.png, dividir.png
+       version del alumno: suma.png, resta.png, multiplicacion.png, division.png
+     (usa unos u otros, pero que coincidan con los @drawable/ del menu).
+  4. MainActivity: click derecho -> Generate -> Override Methods... ->
+     android.app.Activity -> onCreateOptionsMenu y onOptionsItemSelected.
+     Por eso en la del profe esos DOS METODOS QUEDAN ARRIBA de onCreate (el
+     IDE los inserta ahi) y onOptionsItemSelected trae @NonNull.
+
+menusito.xml (EXACTO, 8 items):
+  <?xml version="1.0" encoding="utf-8"?>
+  <menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+      <item
+          android:id="@+id/sumita"
+          android:title="suma"
+          android:icon="@drawable/sumar"
+          app:showAsAction="always" />
+      <item
+          android:id="@+id/restita"
+          android:title="resta"
+          android:icon="@drawable/restar"
+          app:showAsAction="always"/>
+      <item
+          android:id="@+id/multiplicadita"
+          android:title="multiplicacion"
+          android:icon="@drawable/multiplicar"
+          app:showAsAction="always"/>
+      <item
+          android:id="@+id/partidita"
+          android:title="division"
+          android:icon="@drawable/dividir"
+          app:showAsAction="always"/>
+      <item
+          android:id="@+id/Sumita"
+          android:title="Suma"
+          app:showAsAction="ifRoom"/>
+      <item
+          android:id="@+id/Restita"
+          android:title="Resta"
+          app:showAsAction="ifRoom"/>
+      <item
+          android:id="@+id/Multiplica"
+          android:title="Multiplica"
+          app:showAsAction="ifRoom"/>
+      <item
+          android:id="@+id/Divide"
+          android:title="Divide"
+          app:showAsAction="ifRoom"/>
+  </menu>
+  - 4 items con icono y "always" + 4 DUPLICADOS solo texto con "ifRoom".
+  - Ids: sumita, restita, multiplicadita, partidita; los duplicados con
+    Mayuscula (Sumita, Restita) o con otra palabra (Multiplica, Divide).
+  - Titulos en minuscula en los de icono, con Mayuscula en los de texto.
+  - Orden de atributos: id, title, icon, showAsAction. "/>" pegado (el
+    primero con espacio " />"). En la version del alumno el "/>" va en su
+    propia linea, "multiplicación" lleva acento, los iconos son
+    @drawable/suma, resta, multiplicacion, division y hay 2 lineas en
+    blanco antes de </menu>.
+
+(A) MainActivity BASE DEL PROFE (exacta):
+  public class MainActivity extends AppCompatActivity {
+
+      @Override
+      public boolean onCreateOptionsMenu(Menu menu) {
+          getMenuInflater().inflate(R.menu.menusito,menu);
+          return super.onCreateOptionsMenu(menu);
+      }
+
+      @Override
+      public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+          if(item.getItemId()== R.id.sumita || item.getItemId()== R.id.Sumita )
+              Toast.makeText(this,"fue en suma"
+                      ,Toast.LENGTH_LONG).show();
+          return super.onOptionsItemSelected(item);
+      }
+
+      @Override
+      protected void onCreate(Bundle savedInstanceState) {
+          super.onCreate(savedInstanceState);
+          EdgeToEdge.enable(this);
+          setContentView(R.layout.activity_main);
+
+      }
+  }
+  - El if SIN llaves (una sola instruccion).
+  - ",Toast.LENGTH_LONG).show();" en la linea de abajo EMPEZANDO CON LA COMA.
+  - "()== R.id" con espacio solo despues del ==, y espacio antes del ")".
+  - LENGTH_LONG en la del profe (en la del alumno LENGTH_SHORT).
+  - activity_main.xml se queda el de la plantilla (Hello World!).
+  - Bloque de insets borrado; los imports de la plantilla se quedan.
+
+(B) EJERCICIO COMPLETO (como lo resolvio el alumno en OperaFragmentitos):
+  - activity_main.xml: LinearLayout vertical con DOS EditText (ids valor1,
+    valor2), android:layout_marginTop="120dp" el primero y "30dp" el
+    segundo (el margen va ANTES de layout_width), inputType="number", sin
+    hint, "/>" en su propia linea, hijos sangrados con 8 espacios.
+  - Clase Clasesita: private double numero1, numero2; getters/setters del
+    IDE (los de numero2 primero); suma(), resta(), multiplica(), divide()
+    devolviendo double.
+  - MainActivity: "EditText numero1,numero2;", onCreate PRIMERO en esta
+    version y en onCreate solo numero1 = findViewById(R.id.valor1); y
+    numero2 = findViewById(R.id.valor2); luego onCreateOptionsMenu igual al
+    del profe y onOptionsItemSelected:
+      Clasesita objetito = new Clasesita();
+
+      double num1 = Double.parseDouble(numero1.getText().toString());
+      double num2 = Double.parseDouble(numero2.getText().toString());
+
+      if(item.getItemId() == R.id.sumita || item.getItemId()==R.id.Sumita){
+          objetito.setNumero1(num1);
+          objetito.setNumero2(num2);
+          Toast.makeText(this,"Suma: " + objetito.suma(), Toast.LENGTH_SHORT).show();
+          return super.onOptionsItemSelected(item);
+      }
+      else
+      if(item.getItemId() == R.id.restita || item.getItemId()==R.id.Restita){
+          ... igual con "Resta: " + objetito.resta() ...
+      }
+      else
+      if(item.getItemId() == R.id.multiplicadita || item.getItemId()==R.id.Multiplica){
+          ... igual con "Multiplicación: " + objetito.multiplica() ...
+      }
+      else
+      if(item.getItemId() == R.id.partidita || item.getItemId()==R.id.Divide){
+          ... igual con "División: " + objetito.divide() ...
+      }
+      return false;
+  - Imports: "import android.view.Menu;import android.view.MenuItem;import
+    android.view.View;" en UNA linea, "import android.widget.*;", y los de
+    la plantilla (Insets, ViewCompat...) aunque no se usen.
 
 ---------------------------------------------------------------------
 9. LISTVIEW + ADAPTADOR (si aplica)
