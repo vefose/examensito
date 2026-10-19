@@ -1,0 +1,1683 @@
+################################################################
+#  PROYECTO: 01_Fragmentitos (4 fragments suma-resta-multi-division)
+################################################################
+
+==================== JAVA - MainActivity (pantalla principal) ====================
+( Java/MainActivity.java )
+
+package com.example.fragmentitos;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    Button sumita,restita,mult,div;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+
+        sumita = findViewById(R.id.fragment1btn);
+        sumita.setOnClickListener(this);
+        restita = findViewById(R.id.fragment2btn);
+        restita.setOnClickListener(this);
+        mult = findViewById(R.id.fragment3btn);
+        mult.setOnClickListener(this);
+        div = findViewById(R.id.fragment4btn);
+        div.setOnClickListener(this);
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        String cadenita = ((Button)v).getText().toString();
+        if (cadenita.equals("+")){
+            sumitas fragmentito = new sumitas();
+            reemplazafragmento(fragmentito);
+        }
+        else
+        if(cadenita.equals("-")){
+            restitas fragmentito = new restitas();
+            reemplazafragmento(fragmentito);
+        }
+        else
+        if (cadenita.equals("*")){
+            multis fragmentito = new multis();
+            reemplazafragmento(fragmentito);
+
+        }
+        else
+        if (cadenita.equals("/")) {
+            division fragamentito = new division();
+            reemplazafragmento(fragamentito);
+
+        }
+    }
+    private void reemplazafragmento(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.basesita,fragment);
+        fragmentTransaction.commit();
+    }
+}
+
+==================== GRADLE - app/build.gradle.kts (sin modificar, de plantilla) ====================
+( Gradle/app_build.gradle.kts )
+
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace = "com.example.fragmentitos"
+    compileSdk {
+        version = release(37)
+    }
+
+    defaultConfig {
+        applicationId = "com.example.fragmentitos"
+        minSdk = 24
+        targetSdk = 37
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            optimization {
+                enable = false
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation(libs.activity.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.constraintlayout)
+    implementation(libs.material)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.ext.junit)
+}
+
+==================== JAVA - Clase aparte: Clasesita ====================
+( Java/Clases/Clasesita.java )
+
+package com.example.fragmentitos;
+
+public class Clasesita {
+    protected double NUM1;
+    protected double NUM2;
+
+    public double getNUM1() {
+        return NUM1;
+    }
+
+    public void setNUM1(double NUM1) {
+        this.NUM1 = NUM1;
+    }
+
+    public double getNUM2() {
+        return NUM2;
+    }
+
+    public void setNUM2(double NUM2) {
+        this.NUM2 = NUM2;
+    }
+    public double suma(){
+        return NUM1 + NUM2;
+    }
+    public double resta(){
+        return NUM1 - NUM2;
+    }
+    public double multip(){
+        return NUM1 * NUM2;
+    }
+    public double divide(){
+        return NUM1 / NUM2;
+    }
+}
+
+==================== JAVA - Fragment: division ====================
+( Java/Fragments/division.java )
+
+package com.example.fragmentitos;
+
+import android.os.Bundle;
+import android.widget.*;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class division extends Fragment implements View.OnClickListener {
+    View view;
+    Button botoncito;
+    EditText n1,n2;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_division, container, false);
+        botoncito = view.findViewById(R.id.botdiv);
+        botoncito.setOnClickListener(this);
+        n1 = view.findViewById(R.id.num1);
+        n2 = view.findViewById(R.id.num2);
+        return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        Clasesita objetito = new Clasesita();
+        int NUM1 = Integer.parseInt(n1.getText().toString());
+        int NUM2 = Integer.parseInt(n2.getText().toString());
+        objetito.setNUM1(NUM1);
+        objetito.setNUM2(NUM2);
+        Toast.makeText(getContext(),"Resultado: " + objetito.divide(),Toast.LENGTH_SHORT).show();
+    }
+}
+
+==================== JAVA - Fragment: multis ====================
+( Java/Fragments/multis.java )
+
+package com.example.fragmentitos;
+
+import android.os.Bundle;
+import android.widget.*;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+
+public class multis extends Fragment implements View.OnClickListener {
+    Button botoncito;
+    EditText n1,n2;
+    View view;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_multis, container, false);
+        botoncito = view.findViewById(R.id.botmult);
+        botoncito.setOnClickListener(this);
+        n1 = view.findViewById(R.id.num1);
+        n2 = view.findViewById(R.id.num2);
+        return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        Clasesita objetito = new Clasesita();
+        int NUM1 = Integer.parseInt(n1.getText().toString());
+        int NUM2 = Integer.parseInt(n2.getText().toString());
+        objetito.setNUM1(NUM1);
+        objetito.setNUM2(NUM2);
+        Toast.makeText(getContext(),"Resultado: " + objetito.multip(),Toast.LENGTH_SHORT).show();
+    }
+}
+
+==================== JAVA - Fragment: restitas ====================
+( Java/Fragments/restitas.java )
+
+package com.example.fragmentitos;
+
+import android.os.Bundle;
+import android.widget.*;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+
+public class restitas extends Fragment implements View.OnClickListener {
+    View view;
+    EditText n1, n2;
+    Button botoncito;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_restitas, container, false);
+
+        botoncito = view.findViewById(R.id.botresta);
+        botoncito.setOnClickListener(this);
+
+        n1 = view.findViewById(R.id.num1);
+        n2 = view.findViewById(R.id.num2);
+        return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        Clasesita objetito = new Clasesita();
+        int num1 = Integer.parseInt(n1.getText().toString());
+        int num2 = Integer.parseInt(n2.getText().toString());
+        objetito.setNUM1(num1);
+        objetito.setNUM2(num2);
+        Toast.makeText(getContext(),"Resultado: " + objetito.resta(),Toast.LENGTH_SHORT).show();
+    }
+}
+
+==================== JAVA - Fragment: sumitas ====================
+( Java/Fragments/sumitas.java )
+
+package com.example.fragmentitos;
+
+import android.os.Bundle;
+import android.widget.*;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class sumitas extends Fragment implements View.OnClickListener {
+    View view;
+    Button botoncito;
+    EditText n1, n2;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        /******************************
+         * esto hace algo util para que el programa si funcioneee c:
+         */
+        view = inflater.inflate(R.layout.fragment_sumitas, container, false);
+        botoncito = view.findViewById(R.id.botsuma);
+        botoncito.setOnClickListener(this);
+        n1 = view.findViewById(R.id.num1);
+        n2 = view.findViewById(R.id.num2);
+        return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Clasesita objetito = new Clasesita();
+        int NUM1 = Integer.parseInt(n1.getText().toString());
+        int NUM2 = Integer.parseInt(n2.getText().toString());
+        objetito.setNUM1(NUM1);
+        objetito.setNUM2(NUM2);
+        Toast.makeText(getContext(),"RESULTADO: " + objetito.suma(), Toast.LENGTH_SHORT).show();
+
+    }
+}
+
+==================== XML - AndroidManifest ====================
+( XML/AndroidManifest.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Fragmentitos">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+==================== XML - Layout de MainActivity ====================
+( XML/layouts/activity_main.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:background="#62D528"
+        android:id="@+id/basesita"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fragment1btn"
+            android:text="+"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fragment2btn"
+            android:text="-"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fragment3btn"
+            android:text="*"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fragment4btn"
+            android:text="/"/>
+    </LinearLayout>
+
+</LinearLayout>
+
+==================== XML - Layout del fragment division ====================
+( XML/layouts/fragment_division.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="20dp"
+    android:layout_height="match_parent"
+    tools:context=".division">
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/num1"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NUMERO1 "
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="/"
+        android:textSize="30dp"
+        android:textAlignment="center"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/num2"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NUMERO 2"
+        android:layout_marginBottom="10dp"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/botdiv"
+        android:text="divide"/>
+
+</LinearLayout>
+
+==================== XML - Layout del fragment multis ====================
+( XML/layouts/fragment_multis.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="20dp"
+    tools:context=".multis">
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/num1"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NUMERO1 "
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="*"
+        android:textSize="30dp"
+        android:textAlignment="center"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/num2"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NUMERO 2"
+        android:layout_marginBottom="10dp"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/botmult"
+        android:text="multiplica"/>
+
+</LinearLayout>
+
+==================== XML - Layout del fragment restitas ====================
+( XML/layouts/fragment_restitas.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="20dp"
+    tools:context=".restitas">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/num1"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NUMERO1 "
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textSize="30dp"
+        android:textAlignment="center"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/num2"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NUMERO 2"
+        android:layout_marginBottom="10dp"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/botresta"
+        android:text="resta"/>
+
+</LinearLayout>
+
+==================== XML - Layout del fragment sumitas ====================
+( XML/layouts/fragment_sumitas.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="20dp"
+    tools:context=".sumitas">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/num1"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NUMERO1 "
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="+"
+        android:textAlignment="center"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/num2"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NUMERO 2"
+        android:layout_marginBottom="10dp"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/botsuma"
+        android:text="suma"/>
+
+</LinearLayout>
+
+==================== XML - values/colors.xml ====================
+( XML/values/colors.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
+
+==================== XML - values/strings.xml ====================
+( XML/values/strings.xml )
+
+<resources>
+    <string name="app_name">Fragmentitos</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
+
+==================== XML - values/themes.xml ====================
+( XML/values/themes.xml )
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Fragmentitos" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.Fragmentitos" parent="Base.Theme.Fragmentitos" />
+</resources>
+
+
+################################################################
+#  PROYECTO: 02_OperaFragmentitos (menu de opciones con iconos)
+################################################################
+
+==================== JAVA - MainActivity (pantalla principal) ====================
+( Java/MainActivity.java )
+
+package com.example.operafragmentitos;
+
+import android.os.Bundle;
+import android.view.Menu;import android.view.MenuItem;import android.view.View;
+import android.widget.*;
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+    EditText numero1,numero2;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+        numero1 = findViewById(R.id.valor1);
+        numero2 = findViewById(R.id.valor2);
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menusito,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Clasesita objetito = new Clasesita();
+
+        double num1 = Double.parseDouble(numero1.getText().toString());
+        double num2 = Double.parseDouble(numero2.getText().toString());
+
+        if(item.getItemId() == R.id.sumita || item.getItemId()==R.id.Sumita){
+            objetito.setNumero1(num1);
+            objetito.setNumero2(num2);
+            Toast.makeText(this,"Suma: " + objetito.suma(), Toast.LENGTH_SHORT).show();
+            return super.onOptionsItemSelected(item);
+        }
+        else
+        if(item.getItemId() == R.id.restita || item.getItemId()==R.id.Restita){
+            objetito.setNumero1(num1);
+            objetito.setNumero2(num2);
+            Toast.makeText(this,"Resta: " + objetito.resta(), Toast.LENGTH_SHORT).show();
+            return super.onOptionsItemSelected(item);
+        }
+        else
+        if(item.getItemId() == R.id.multiplicadita || item.getItemId()==R.id.Multiplica){
+            objetito.setNumero1(num1);
+            objetito.setNumero2(num2);
+            Toast.makeText(this,"Multiplicación: " + objetito.multiplica(), Toast.LENGTH_SHORT).show();
+            return super.onOptionsItemSelected(item);
+        }
+        else
+        if(item.getItemId() == R.id.partidita || item.getItemId()==R.id.Divide){
+            objetito.setNumero1(num1);
+            objetito.setNumero2(num2);
+            Toast.makeText(this,"División: " + objetito.divide(), Toast.LENGTH_SHORT).show();
+            return super.onOptionsItemSelected(item);
+        }
+        return false;
+    }
+
+
+}
+
+==================== GRADLE - app/build.gradle.kts (sin modificar, de plantilla) ====================
+( Gradle/app_build.gradle.kts )
+
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace = "com.example.operafragmentitos"
+    compileSdk {
+        version = release(37)
+    }
+
+    defaultConfig {
+        applicationId = "com.example.operafragmentitos"
+        minSdk = 24
+        targetSdk = 37
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            optimization {
+                enable = false
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation(libs.activity.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.constraintlayout)
+    implementation(libs.material)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.ext.junit)
+}
+
+==================== JAVA - Clase aparte: Clasesita ====================
+( Java/Clases/Clasesita.java )
+
+package com.example.operafragmentitos;
+
+public class Clasesita {
+    private double numero1;
+    private double numero2;
+
+    public double getNumero2() {
+        return numero2;
+    }
+
+    public void setNumero2(double numero2) {
+        this.numero2 = numero2;
+    }
+
+    public double getNumero1() {
+        return numero1;
+    }
+
+    public void setNumero1(double numero1) {
+        this.numero1 = numero1;
+    }
+    public double suma(){
+        return numero1+numero2;
+    }
+    public double resta(){
+        return numero1-numero2;
+    }
+    public double multiplica(){
+        return numero1*numero2;
+    }
+    public double divide(){
+        return numero1/numero2;
+    }
+}
+
+
+==================== XML - AndroidManifest ====================
+( XML/AndroidManifest.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.OperaFragmentitos">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+==================== XML - Layout de MainActivity ====================
+( XML/layouts/activity_main.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+        <EditText
+            android:layout_marginTop="120dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/valor1"
+            android:inputType="number"
+            />
+        <EditText
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/valor2"
+            android:inputType="number"
+            />
+
+</LinearLayout>
+
+==================== XML - Menu de opciones ====================
+( XML/menu/menusito.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/sumita"
+        android:title="suma"
+        android:icon="@drawable/suma"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/restita"
+        android:title="resta"
+        android:icon="@drawable/resta"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/multiplicadita"
+        android:title="multiplicación"
+        android:icon="@drawable/multiplicacion"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/partidita"
+        android:title="division"
+        android:icon="@drawable/division"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/Sumita"
+        android:title="Suma"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/Restita"
+        android:title="Resta"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/Multiplica"
+        android:title="Multiplica"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/Divide"
+        android:title="Divide"
+        app:showAsAction="ifRoom"
+        />
+
+
+</menu>
+
+==================== XML - values/colors.xml ====================
+( XML/values/colors.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
+
+==================== XML - values/strings.xml ====================
+( XML/values/strings.xml )
+
+<resources>
+    <string name="app_name">OperaFragmentitos</string>
+</resources>
+
+==================== XML - values/themes.xml ====================
+( XML/values/themes.xml )
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.OperaFragmentitos" parent="Theme.Material3.DayNight">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.OperaFragmentitos" parent="Base.Theme.OperaFragmentitos" />
+</resources>
+
+
+################################################################
+#  PROYECTO: 03_ListView (ListView con Adaptador BaseAdapter)
+################################################################
+
+==================== JAVA - MainActivity (pantalla principal) ====================
+( Java/MainActivity.java )
+
+package com.example.listview;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+    String deportescomenta [] = {"uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez"};
+    String deporteslista [] = {"depo1","depo2","depo3","depo4","depo5","depo6","depo7","depo8","depo9","depo10"};
+    int deporteimagenes [] =  {R.drawable.worlds_largest_larp,R.drawable.minecraft_logo,R.drawable.caballero_retira,
+            R.drawable.gato_muejeje,R.drawable.hombre_de_negocios,R.drawable.ijodelaberga,R.drawable.itadori_dontget,
+            R.drawable.patricio_traje_meme,R.drawable.spiderman,R.drawable.veggeto
+    };
+    ListView listViewsita;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+
+        listViewsita = findViewById(R.id.vistitas);
+        listViewsita.setOnItemClickListener(this);
+
+        Adaptador adaptadorsito = new Adaptador(this,deportescomenta,deporteslista,deporteimagenes);
+        listViewsita.setAdapter(adaptadorsito);
+
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        Toast.makeText(this,deportescomenta[position],Toast.LENGTH_SHORT).show();
+    }
+}
+
+==================== GRADLE - app/build.gradle.kts (sin modificar, de plantilla) ====================
+( Gradle/app_build.gradle.kts )
+
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace = "com.example.listview"
+    compileSdk {
+        version = release(37)
+    }
+
+    defaultConfig {
+        applicationId = "com.example.listview"
+        minSdk = 24
+        targetSdk = 37
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            optimization {
+                enable = false
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation(libs.activity.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.constraintlayout)
+    implementation(libs.material)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.ext.junit)
+}
+
+==================== JAVA - Clase aparte: Adaptador ====================
+( Java/Clases/Adaptador.java )
+
+package com.example.listview;
+
+import android.widget.*;
+import android.view.*;
+import android.content.Context;
+public class Adaptador extends BaseAdapter {
+    Context contexto;
+    String[] listadeportes;
+    String[] listacomentar ;
+    int[] listaimagenes;
+    LayoutInflater inflater;
+    public Adaptador (Context contexto,String [] listadeportes, String[] listacomentar, int [] listaimagenes){
+        this.contexto = contexto;
+        this.listadeportes = listacomentar;
+        this.listacomentar = listacomentar;
+        this.listaimagenes = listaimagenes;
+        this.inflater = LayoutInflater.from(contexto);
+    }
+    @Override
+    public int getCount(){
+        return listadeportes.length;
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        convertView = inflater.inflate(R.layout.basurita,null);
+        TextView textView1= convertView.findViewById(R.id.textview);
+        TextView textView2 = convertView.findViewById(R.id.textview2);
+        ImageView deporteimg =convertView.findViewById(R.id.imageicon);
+
+        textView1.setText(listadeportes[position]);
+        textView2.setText(listacomentar[position]);
+        deporteimg.setImageResource(listaimagenes[position]);
+        return convertView;
+    }
+}
+
+
+==================== XML - AndroidManifest ====================
+( XML/AndroidManifest.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ListView">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+==================== XML - Layout de MainActivity ====================
+( XML/layouts/activity_main.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+<ListView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/vistitas"/>
+
+</LinearLayout>
+
+==================== XML - Layout del renglon de la lista (lo usa el Adaptador) ====================
+( XML/layouts/basurita.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageicon" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/textview2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="30dp" />
+    </LinearLayout>
+</LinearLayout>
+
+
+==================== XML - values/colors.xml ====================
+( XML/values/colors.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
+
+==================== XML - values/strings.xml ====================
+( XML/values/strings.xml )
+
+<resources>
+    <string name="app_name">ListView</string>
+</resources>
+
+==================== XML - values/themes.xml ====================
+( XML/values/themes.xml )
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ListView" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.ListView" parent="Base.Theme.ListView" />
+</resources>
+
+
+################################################################
+#  PROYECTO: 04_ListViewsito (version inicial del ListView, a medias)
+################################################################
+
+==================== JAVA - MainActivity (pantalla principal) ====================
+( Java/MainActivity.java )
+
+package com.example.listview;
+
+import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+    String deportescomenta [] = {"uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez"};
+    String deporteslista [] = {"depo1","depo2","depo3","depo4","depo5","depo6","depo7","depo8","depo9","depo10"};
+    int deporteimagenes [] =  {R.drawable.worlds_largest_larp,R.drawable.minecraft_logo};
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+
+    }
+}
+
+==================== GRADLE - app/build.gradle.kts (sin modificar, de plantilla) ====================
+( Gradle/app_build.gradle.kts )
+
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace = "com.example.listview"
+    compileSdk {
+        version = release(37)
+    }
+
+    defaultConfig {
+        applicationId = "com.example.listview"
+        minSdk = 24
+        targetSdk = 37
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            optimization {
+                enable = false
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation(libs.activity.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.constraintlayout)
+    implementation(libs.material)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.ext.junit)
+}
+
+==================== XML - AndroidManifest ====================
+( XML/AndroidManifest.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ListView">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+==================== XML - Layout de MainActivity ====================
+( XML/layouts/activity_main.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</LinearLayout>
+
+==================== XML - Layout del renglon de la lista (lo usa el Adaptador) ====================
+( XML/layouts/basurita.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageicon"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textview"
+            android:textSize="20dp"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:id="@+id/textview2"
+            />
+</LinearLayout>
+</LinearLayout>
+
+
+==================== XML - values/colors.xml ====================
+( XML/values/colors.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
+
+==================== XML - values/strings.xml ====================
+( XML/values/strings.xml )
+
+<resources>
+    <string name="app_name">ListView</string>
+</resources>
+
+==================== XML - values/themes.xml ====================
+( XML/values/themes.xml )
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ListView" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.ListView" parent="Base.Theme.ListView" />
+</resources>
+
+
+################################################################
+#  PROYECTO: 05_llamaditas (botones + clase + ArrayList, carpeta local)
+################################################################
+
+==================== JAVA - MainActivity (pantalla principal) ====================
+( Java/MainActivity.java )
+
+package com.example.llamaditas;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    Button botoncitol, botonciton, botoncitoi, bpaquetito;
+    EditText editadito;
+    arraycito alistito;
+    int cuantos;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+
+        alistito = new arraycito();
+        editadito = findViewById(R.id.textito);
+        botoncitol = findViewById(R.id.blocal);
+        botonciton = findViewById(R.id.bnacional);
+        botoncitoi = findViewById(R.id.binternacional);
+        bpaquetito = findViewById(R.id.bpagar);
+
+        botoncitol.setOnClickListener(this);
+        botonciton.setOnClickListener(this);
+        botoncitoi.setOnClickListener(this);
+        bpaquetito.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        String cadenita = ((Button)v).getText().toString();
+
+        if (cadenita.equals("Local")) {
+            clasesita objetito = new clasesita();
+            objetito.setTipo(1);
+            objetito.setDuracion(Integer.parseInt(editadito.getText().toString()));
+            objetito.costol();
+            alistito.agregar(objetito);
+            Toast.makeText(this, "agregado", Toast.LENGTH_SHORT).show();
+        }
+        if (cadenita.equals("Nacional")) {
+            clasesita objetito = new clasesita();
+            objetito.setTipo(2);
+            objetito.setDuracion(Integer.parseInt(editadito.getText().toString()));
+            objetito.coston();
+            alistito.agregar(objetito);
+            Toast.makeText(this, "agregado", Toast.LENGTH_SHORT).show();
+        }
+        if (cadenita.equals("Internacional")) {
+            clasesita objetito = new clasesita();
+            objetito.setTipo(3);
+            objetito.setDuracion(Integer.parseInt(editadito.getText().toString()));
+            objetito.costoi();
+            alistito.agregar(objetito);
+            Toast.makeText(this, "agregado", Toast.LENGTH_SHORT).show();
+        }
+        if (cadenita.equals("Pagar")) {
+            ArrayList<clasesita> aregresito = new ArrayList<>();
+            aregresito = alistito.regresar();
+            cuantos = aregresito.size();
+            for (int i = 0; i < cuantos; i++) {
+                Toast.makeText(this, "Tipo: " + aregresito.get(i).getTipo()
+                        + "  Duracion: " + aregresito.get(i).getDuracion()
+                        + "  Costo: $" + aregresito.get(i).getCosto(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+}
+
+
+==================== GRADLE - app/build.gradle.kts (sin modificar, de plantilla) ====================
+( Gradle/app_build.gradle.kts )
+
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace = "com.example.llamaditas"
+    compileSdk {
+        version = release(37)
+    }
+
+    defaultConfig {
+        applicationId = "com.example.llamaditas"
+        minSdk = 24
+        targetSdk = 37
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            optimization {
+                enable = false
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.material)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
+}
+
+
+==================== JAVA - Clase aparte: arraycito ====================
+( Java/Clases/arraycito.java )
+
+package com.example.llamaditas;
+
+import java.util.ArrayList;
+
+public class arraycito {
+    ArrayList<clasesita> alistito = new ArrayList<>();
+    public void agregar(clasesita objetito){
+        alistito.add(objetito);
+    }
+    public ArrayList regresar(){
+        return alistito;
+    }
+}
+
+
+==================== JAVA - Clase aparte: clasesita ====================
+( Java/Clases/clasesita.java )
+
+package com.example.llamaditas;
+
+public class clasesita {
+    private int tipo;
+    private int duracion;
+    private int costito;
+
+    public int getCosto() {
+        return costito;
+    }
+
+    public void setCosto(int costo) {
+        this.costito = costo;
+    }
+
+    public int getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
+    }
+    public void costol(){
+        costito = 1 * duracion;
+    }
+    public void coston(){
+        costito = 2 * duracion;
+    }
+    public void costoi(){
+        costito = 3 * duracion;
+    }
+}
+
+
+==================== XML - AndroidManifest ====================
+( XML/AndroidManifest.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Llamaditas">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+
+
+==================== XML - Layout de MainActivity ====================
+( XML/layouts/activity_main.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="50dp"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textito"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Local"
+        android:id="@+id/blocal"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nacional"
+        android:id="@+id/bnacional"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Internacional"
+        android:id="@+id/binternacional"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pagar"
+        android:id="@+id/bpagar"/>
+</LinearLayout>
+
+
+==================== XML - values/colors.xml ====================
+( XML/values/colors.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
+
+
+==================== XML - values/strings.xml ====================
+( XML/values/strings.xml )
+
+<resources>
+    <string name="app_name">llamaditas</string>
+</resources>
+
+
+==================== XML - values/themes.xml ====================
+( XML/values/themes.xml )
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Llamaditas" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.Llamaditas" parent="Base.Theme.Llamaditas" />
+</resources>
+
+
+
