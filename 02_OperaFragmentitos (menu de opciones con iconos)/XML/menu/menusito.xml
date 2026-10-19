@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/sumita"
+        android:title="suma"
+        android:icon="@drawable/suma"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/restita"
+        android:title="resta"
+        android:icon="@drawable/resta"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/multiplicadita"
+        android:title="multiplicación"
+        android:icon="@drawable/multiplicacion"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/partidita"
+        android:title="division"
+        android:icon="@drawable/division"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/Sumita"
+        android:title="Suma"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/Restita"
+        android:title="Resta"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/Multiplica"
+        android:title="Multiplica"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/Divide"
+        android:title="Divide"
+        app:showAsAction="ifRoom"
+        />
+
+
+</menu>
