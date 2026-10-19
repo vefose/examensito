@@ -1,0 +1,42 @@
+QUE HAY EN ESTE ZIP
+===================
+
+prompt.txt           -> El prompt con todas las reglas del estilo (que hacer y que no).
+                        Pon arriba que app quieres y pegalo completo.
+TODO_EL_CODIGO.txt   -> Todo el codigo de los 5 proyectos en un solo archivo,
+                        cada archivo con su etiqueta (JAVA - MainActivity, JAVA - Clase
+                        aparte, JAVA - Fragment, XML - Layout..., etc.).
+
+Cada carpeta 0X_... es un proyecto, ordenado igual:
+  Java/MainActivity.java     pantalla principal
+  Java/Clases/               clases aparte (Clasesita, Adaptador, arraycito...)
+  Java/Fragments/            fragments (solo en Fragmentitos)
+  XML/layouts/               activity_main.xml, fragment_*.xml, basurita.xml (renglon de lista)
+  XML/menu/                  menusito.xml (solo OperaFragmentitos)
+  XML/values/                strings, colors, themes
+  XML/AndroidManifest.xml
+  Gradle/app_build.gradle.kts  (el de la plantilla, nunca se modifico)
+  imagenes_drawable/         imagenes que van en res/drawable
+  TODO_EL_CODIGO_0X.txt      el codigo de ese proyecto en un solo archivo
+
+PROYECTOS (todos son codigo ORIGINAL, escrito a mano)
+  01_Fragmentitos      4 fragments (sumitas, restitas, multis, division) que cambian
+                       dentro de un FrameLayout verde; Clasesita con NUM1/NUM2.
+                       Fuente: Downloads/fragmentitos.zip
+  02_OperaFragmentitos Menu de opciones con iconos (menusito.xml) + 2 EditText;
+                       resultados en Toast. No tiene fragments aunque se llame asi.
+                       Fuente: Downloads/OperaFragmentitos.zip
+  03_ListView          ListView + Adaptador (BaseAdapter) con imagenes y 2 textos;
+                       renglon en basurita.xml. Fuente: Downloads/ListView.zip
+                       OJO: trae los bugs originales (this.listadeportes = listacomentar;
+                       y los arreglos van en otro orden al constructor).
+  04_ListViewsito      La misma practica a medias (sin Adaptador, layout con el
+                       "Hello World!" de la plantilla). Fuente: Downloads/ListViewsito.zip
+  05_llamaditas        Botones Local/Nacional/Internacional/Pagar, clase clasesita
+                       (tipo, duracion, costo) y arraycito (envoltorio de ArrayList).
+                       Fuente: AndroidStudioProjects/llamaditas (no venia en zip, pero
+                       tambien es original).
+
+NO SE INCLUYERON (no son el estilo original, estan reescritos/limpiados):
+  ListViewVertical.zip, ListViewHorizontal.zip, zipsitokirk.zip, y el ListView2,
+  combitos (MainActivity) y Ahorcadito locales.
