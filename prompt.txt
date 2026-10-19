@@ -1,0 +1,453 @@
+=====================================================================
+PROMPT: APP DE ANDROID STUDIO CON EL ESTILO EXACTO DEL PROGRAMADOR
+=====================================================================
+
+LA APP QUE QUIERO:
+>>> [ESCRIBE AQUI QUE DEBE HACER LA APP. Ej: "4 fragments: suma, resta,
+>>> multiplicacion y division, con una clase para las operaciones"] <<<
+
+Hazla en Android Studio respetando AL PIE DE LA LETRA todas las reglas de
+abajo. El codigo tiene que verse escrito a mano por un estudiante con un
+estilo muy concreto, NO como codigo "profesional" o "limpio". Si algo no esta
+en estas reglas, haz lo mas simple y directo posible, nunca lo mas elegante.
+La app tiene que compilar y funcionar cuando el usuario mete bien los datos.
+
+---------------------------------------------------------------------
+1. PROYECTO, LENGUAJE Y GRADLE
+---------------------------------------------------------------------
+- Lenguaje: SOLO Java. Nada de Kotlin.
+- Plantilla "Empty Views Activity" de Android Studio, sin modificar:
+  paquete com.example.<nombreenminusculas>, minSdk 24, targetSdk 37,
+  compileSdk release(37), Java 11 (JavaVersion.VERSION_11).
+- NO edites build.gradle.kts ni settings.gradle.kts. Deja las dependencias de
+  la plantilla (activity, appcompat, constraintlayout, material, junit,
+  espresso). NO agregues dependencias: nada de RecyclerView, ViewBinding,
+  DataBinding ni librerias externas. Fragment ya viene con appcompat.
+- NO toques colors.xml (solo trae black y white) ni themes.xml. El tema se
+  queda en Theme.Material3.DayNight.NoActionBar. UNICA excepcion: si la app usa
+  menu de opciones (onCreateOptionsMenu), cambia el parent a
+  "Theme.Material3.DayNight" (sin NoActionBar) para que salga la barra.
+- El manifest se queda como lo genera la plantilla.
+- strings.xml: solo app_name. Si creas un Fragment con el asistente, deja lo
+  que genera (el comentario "<!-- TODO: Remove or change this placeholder
+  text -->" y el string hello_blank_fragment); no lo borres.
+- Nombre del proyecto en diminutivo si se puede: Fragmentitos,
+  OperaFragmentitos, llamaditas, combitos, Ahorcadito, ListViewsito.
+
+---------------------------------------------------------------------
+2. NOMBRES (LO MAS IMPORTANTE)
+---------------------------------------------------------------------
+- Todo en espanol y en DIMINUTIVO (-ito, -ita, -sito, -sita, -itos, -itas):
+    objetos:  objetito, fragmentito, adaptadorsito, alistito, aregresito
+    widgets:  botoncito, editadito, textito, combito, imagencita, vistita
+    listas:   listViewsita
+    clases:   clasesita / Clasesita, arraycito
+    fragments: sumitas, restitas, multis, division
+    recursos: basurita.xml (renglon de la lista), menusito.xml,
+              @+id/basesita (FrameLayout donde caen los fragments),
+              @+id/vistitas (ListView)
+    items de menu: sumita, restita, multiplicadita, partidita (division)
+- La variable con el texto del boton presionado SIEMPRE se llama "cadenita".
+- La clase modelo/logica se llama "clasesita" o "Clasesita". El objeto que se
+  crea de ella SIEMPRE se llama "objetito".
+- Las clases propias (fragments, wrappers) pueden ir EN MINUSCULA:
+  public class sumitas extends Fragment, public class arraycito.
+  MainActivity y Adaptador si van con mayuscula.
+- Los numeros leidos van en MAYUSCULAS: int NUM1, int NUM2 (y en la clase
+  modelo, campos NUM1, NUM2 con setNUM1/getNUM1). Puedes mezclar con num1 en
+  minuscula en algun archivo (no lo hagas consistente).
+- Si dos nombres chocan, pegale una letra al final: botoncitol, botonciton,
+  botoncitoi (local/nacional/internacional); costol(), coston(), costoi().
+- Los ids XML van en minuscula pegada y casi NUNCA se llaman igual que la
+  variable Java:
+    numero1 = findViewById(R.id.valor1);
+    sumita  = findViewById(R.id.fragment1btn);
+    bpaquetito = findViewById(R.id.bpagar);
+  Ids tipicos: blocal, bnacional, bpagar, botsuma, botresta, botmult, botdiv,
+  fragment1btn..fragment4btn, num1, num2, valor1, valor2, textito,
+  imageicon, textview, textview2.
+- Datos de prueba de relleno: {"uno","dos","tres",...,"diez"},
+  {"depo1","depo2",...,"depo10"}. Imagenes con nombre de meme
+  (gato_muejeje, veggeto, spiderman, patricio_traje_meme...).
+- Algun error de dedo o espacio de mas se vale y se deja asi:
+  "fragamentito", texto "NUMERO1 " con espacio al final.
+
+---------------------------------------------------------------------
+3. ESTRUCTURA DE UNA ACTIVITY (ORDEN EXACTO)
+---------------------------------------------------------------------
+package ...;
+
+imports (desordenados, usando comodin: import android.widget.*;
+  a veces varios en una sola linea:
+  import android.view.Menu;import android.view.MenuItem;import android.view.View;)
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+    Button sumita,restita,mult,div;          <- campos juntos en UNA linea,
+    EditText numero1,numero2;                   SIN private, SIN final
+    @Override                                <- SIN linea en blanco antes
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);             <- se deja de la plantilla
+        setContentView(R.layout.activity_main);
+                                             <- el bloque ViewCompat.setOnApplyWindowInsetsListener
+                                                SE BORRA, pero sus imports (Insets, ViewCompat,
+                                                WindowInsetsCompat) SE QUEDAN aunque no se usen
+        sumita = findViewById(R.id.fragment1btn);
+        sumita.setOnClickListener(this);     <- find + setOnClickListener(this) inmediatamente,
+        restita = findViewById(R.id.fragment2btn);   widget por widget
+        restita.setOnClickListener(this);
+        ...
+
+                                             <- 1 o 2 lineas en blanco antes de cerrar
+    }
+
+    @Override
+    public void onClick(View v) { ... }
+
+    private void reemplazafragmento(Fragment fragment){ ... }   <- maximo UN metodo
+}                                                                  auxiliar, al final
+
+- Arreglos como campos de la Activity, estilo C y con espacio antes de []:
+    String deportescomenta [] = {"uno","dos","tres"};
+    int deporteimagenes [] =  {R.drawable.spiderman,R.drawable.veggeto};
+
+---------------------------------------------------------------------
+4. EVENTOS (MUY CARACTERISTICO)
+---------------------------------------------------------------------
+- La Activity/Fragment IMPLEMENTA la interfaz:
+    implements View.OnClickListener
+    implements AdapterView.OnItemClickListener   (ListView)
+  y cada widget usa setOnClickListener(this) / setOnItemClickListener(this).
+- PROHIBIDO: lambdas (v -> ...), clases anonimas (new View.OnClickListener(){}),
+  android:onClick en XML, method references.
+- UN solo onClick para todos los botones. Se distingue el boton POR SU TEXTO,
+  no por el id:
+      String cadenita = ((Button)v).getText().toString();
+      if (cadenita.equals("+")){
+          sumitas fragmentito = new sumitas();
+          reemplazafragmento(fragmentito);
+      }
+      else
+      if(cadenita.equals("-")){
+          ...
+      }
+  El "else" va SOLO en su linea y el "if" en la siguiente (NO "else if" en
+  una linea). Otra variante valida (llamaditas): varios if sueltos, sin else.
+- NUNCA uses switch.
+- Repite el codigo completo en cada rama (crear objetito, setear, Toast). No
+  factorices en metodos, salvo el de cambiar fragment.
+- Menu de opciones (si aplica):
+      @Override
+      public boolean onCreateOptionsMenu(Menu menu) {
+          getMenuInflater().inflate(R.menu.menusito,menu);
+          return super.onCreateOptionsMenu(menu);
+      }
+      @Override
+      public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+          Clasesita objetito = new Clasesita();
+          double num1 = Double.parseDouble(numero1.getText().toString());
+          double num2 = Double.parseDouble(numero2.getText().toString());
+          if(item.getItemId() == R.id.sumita || item.getItemId()==R.id.Sumita){
+              objetito.setNumero1(num1);
+              objetito.setNumero2(num2);
+              Toast.makeText(this,"Suma: " + objetito.suma(), Toast.LENGTH_SHORT).show();
+              return super.onOptionsItemSelected(item);
+          }
+          else
+          if(...){ ... return super.onOptionsItemSelected(item); }
+          return false;
+      }
+  Aqui SI se compara por id, con condicion doble porque cada opcion esta
+  duplicada en el menu. Espacios alrededor de == inconsistentes en la misma
+  linea. Se parsea ANTES de saber que item se toco.
+
+---------------------------------------------------------------------
+5. CLASE MODELO (clasesita / Clasesita)
+---------------------------------------------------------------------
+- Campos private (o protected), uno por linea.
+- Getters y setters GENERADOS POR EL IDE (Alt+Insert), sin tocar, con
+  "this.x = x;". El orden puede ser raro (los de numero2 antes que los de
+  numero1). En alguna clase solo hay setters, sin getters.
+- Un metodo minimo por operacion, sin parametros, sobre los campos:
+      public double suma(){
+          return NUM1 + NUM2;
+      }
+      public double multip(){ ... }  / multiplica() / divide() / resta()
+  Llave pegada al parentesis: "suma(){". Sin linea en blanco entre los metodos
+  de operacion (si entre los getters/setters, como los genera el IDE).
+- Variante: metodos void que MODIFICAN un campo:
+      public void costol(){
+          costito = 1 * duracion;
+      }
+  (el "1 *" se escribe aunque sobre).
+- SIN constructor, SIN toString, SIN validacion, divide() NO revisa cero.
+- Tipos: double en la clase y int al leer (int NUM1 = Integer.parseInt(...);
+  objetito.setNUM1(NUM1); se pasa int a un setter double sin problema).
+- El objeto se crea DENTRO del manejador cada vez:
+      Clasesita objetito = new Clasesita();
+  nunca como campo (excepto la lista acumuladora, ver abajo).
+- Para guardar varios objetos: clase envoltorio "arraycito":
+      public class arraycito {
+          ArrayList<clasesita> alistito = new ArrayList<>();
+          public void agregar(clasesita objetito){
+              alistito.add(objetito);
+          }
+          public ArrayList regresar(){          <- ArrayList CRUDO, sin <>
+              return alistito;
+          }
+      }
+  Y al usarla, asignacion redundante:
+      ArrayList<clasesita> aregresito = new ArrayList<>();
+      aregresito = alistito.regresar();
+      cuantos = aregresito.size();               <- cuantos es CAMPO, no local
+      for (int i = 0; i < cuantos; i++) {
+          Toast.makeText(this, "Tipo: " + aregresito.get(i).getTipo() + ..., Toast.LENGTH_SHORT).show();
+      }
+  Codigos como int (tipo 1, 2, 3), nunca enum ni constantes.
+
+---------------------------------------------------------------------
+6. ENTRADA Y SALIDA DE DATOS
+---------------------------------------------------------------------
+- Leer: Integer.parseInt(n1.getText().toString())  o  Double.parseDouble(...).
+- PROHIBIDO: trim(), isEmpty(), length()==0, try/catch, revisar null,
+  revisar division entre cero, TextUtils. Si el campo esta vacio la app
+  truena, y asi se queda.
+- TODA la salida va por Toast:
+      Toast.makeText(getContext(),"Resultado: " + objetito.resta(),Toast.LENGTH_SHORT).show();
+  (this en Activity, getContext() en Fragment). Sin espacio despues de la
+  coma en la mayoria de los argumentos.
+- NO hay TextView de resultado, ni setText para resultados, ni Log, ni
+  AlertDialog, ni Snackbar.
+- Mayusculas y acentos de los mensajes inconsistentes: "RESULTADO: " en un
+  archivo y "Resultado: " en otro, "agregado" en minuscula, "Multiplicación"
+  con acento y title="division" sin acento.
+
+---------------------------------------------------------------------
+7. FRAGMENTS (si la app usa fragments)
+---------------------------------------------------------------------
+- Un Fragment por pantalla u operacion, creado con el asistente (Blank
+  Fragment) y con su layout fragment_<nombre>.xml copiado y pegado del
+  anterior, cambiando solo el simbolo, el id del boton y el texto.
+- Estructura exacta de cada fragment:
+      package ...;
+
+      import android.os.Bundle;
+      import android.widget.*;
+      import androidx.fragment.app.Fragment;
+
+      import android.view.LayoutInflater;
+      import android.view.View;
+      import android.view.ViewGroup;
+
+      public class restitas extends Fragment implements View.OnClickListener {
+          View view;
+          EditText n1, n2;
+          Button botoncito;
+          @Override
+          public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                   Bundle savedInstanceState) {
+              // Inflate the layout for this fragment
+              view = inflater.inflate(R.layout.fragment_restitas, container, false);
+
+              botoncito = view.findViewById(R.id.botresta);
+              botoncito.setOnClickListener(this);
+
+              n1 = view.findViewById(R.id.num1);
+              n2 = view.findViewById(R.id.num2);
+              return view;
+          }
+
+          @Override
+          public void onClick(View view) {      <- el parametro "view" tapa al campo
+              Clasesita objetito = new Clasesita();
+              int num1 = Integer.parseInt(n1.getText().toString());
+              int num2 = Integer.parseInt(n2.getText().toString());
+              objetito.setNUM1(num1);
+              objetito.setNUM2(num2);
+              Toast.makeText(getContext(),"Resultado: " + objetito.resta(),Toast.LENGTH_SHORT).show();
+          }
+      }
+  - "View view" como CAMPO. El orden de los campos cambia de un fragment a
+    otro.
+  - Se queda la firma de la plantilla partida en dos lineas y el comentario
+    "// Inflate the layout for this fragment". En UNO de los fragments ese
+    comentario se cambia por:
+        /******************************
+         * esto hace algo util para que el programa si funcioneee c:
+         */
+    Es el UNICO comentario "propio" de todo el proyecto.
+  - Se borran los metodos newInstance / ARG_PARAM de la plantilla del
+    fragment.
+- Cambio de fragment en MainActivity, verboso y SIN addToBackStack:
+      private void reemplazafragmento(Fragment fragment){
+          FragmentManager fragmentManager = getSupportFragmentManager();
+          FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+          fragmentTransaction.replace(R.id.basesita,fragment);
+          fragmentTransaction.commit();
+      }
+  y en cada rama: sumitas fragmentito = new sumitas(); reemplazafragmento(fragmentito);
+
+---------------------------------------------------------------------
+8. MENU (res/menu/menusito.xml, si aplica)
+---------------------------------------------------------------------
+- 4 items con icono PNG propio (@drawable/suma, resta, multiplicacion,
+  division) y app:showAsAction="always", y OTROS 4 items DUPLICADOS solo de
+  texto con app:showAsAction="ifRoom". Ids de los duplicados con Mayuscula
+  (Sumita, Restita) o con otra palabra (Multiplica, Divide).
+- Titulos en minuscula en los de icono ("suma", "resta", "multiplicación",
+  "division") y con mayuscula en los de texto ("Suma", "Resta").
+- Atributos en orden id, title, icon, showAsAction; el "/>" en su propia
+  linea; dos lineas en blanco antes de </menu>.
+
+---------------------------------------------------------------------
+9. LISTVIEW + ADAPTADOR (si aplica)
+---------------------------------------------------------------------
+- Clase "Adaptador extends BaseAdapter", hecha asi:
+      package com.example.listview;
+
+      import android.widget.*;
+      import android.view.*;
+      import android.content.Context;
+      public class Adaptador extends BaseAdapter {    <- sin linea en blanco antes
+          Context contexto;                            <- sin private / final
+          String[] listadeportes;
+          String[] listacomentar ;                     <- espacio antes del ;
+          int[] listaimagenes;
+          LayoutInflater inflater;
+          public Adaptador (Context contexto,String [] listadeportes, String[] listacomentar, int [] listaimagenes){
+              this.contexto = contexto;
+              ...
+              this.inflater = LayoutInflater.from(contexto);
+          }
+          @Override
+          public int getCount(){
+              return listadeportes.length;
+          }
+
+          @Override
+          public Object getItem(int i) {
+              return null;                              <- se deja asi
+          }
+
+          @Override
+          public long getItemId(int i) {
+              return 0;                                 <- se deja asi
+          }
+
+          @Override
+          public View getView(int position, View convertView, ViewGroup parent) {
+              convertView = inflater.inflate(R.layout.basurita,null);   <- SIEMPRE infla
+              TextView textView1= convertView.findViewById(R.id.textview);
+              TextView textView2 = convertView.findViewById(R.id.textview2);
+              ImageView deporteimg =convertView.findViewById(R.id.imageicon);
+
+              textView1.setText(listadeportes[position]);
+              textView2.setText(listacomentar[position]);
+              deporteimg.setImageResource(listaimagenes[position]);
+              return convertView;
+          }
+      }
+  Espacios alrededor del "=" inconsistentes.
+- PROHIBIDO: ViewHolder, reutilizar convertView (if convertView == null),
+  RecyclerView, private final, position % length, getItem que devuelva algo.
+- En MainActivity:
+      ListView listViewsita;
+      ...
+      listViewsita = findViewById(R.id.vistitas);
+      listViewsita.setOnItemClickListener(this);
+
+      Adaptador adaptadorsito = new Adaptador(this,deportescomenta,deporteslista,deporteimagenes);
+      listViewsita.setAdapter(adaptadorsito);
+  (primero el listener y despues el adaptador). Y:
+      @Override
+      public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+          Toast.makeText(this,deportescomenta[position],Toast.LENGTH_SHORT).show();
+      }
+  (parametros con los nombres que pone el IDE: adapterView, view, position, l).
+- El arreglo de imagenes partido en varias lineas, con "};" en su propia linea.
+
+---------------------------------------------------------------------
+10. LAYOUTS XML
+---------------------------------------------------------------------
+- SIEMPRE LinearLayout. Se cambia a mano el ConstraintLayout raiz de la
+  plantilla y se puede dejar algun app:layout_constraint* colgando. NUNCA
+  ConstraintLayout, RelativeLayout, ScrollView, CardView ni Material
+  components.
+- Raiz: android:orientation="vertical", id @+id/main, tools:context y
+  margen fijo grande: android:layout_margin="20dp" (fragments) o "50dp", o un
+  android:layout_marginTop="120dp" en el primer EditText.
+- Orden de atributos de cada vista: layout_width, layout_height, LUEGO
+  android:id, luego text/textSize/etc. (el id NO va primero). En vistas con
+  margen, el margen puede ir antes del width.
+- Ancho siempre match_parent, excepto los botones de operacion
+  (wrap_content).
+- textSize en dp, NUNCA en sp: android:textSize="30dp", "20dp".
+- Texto fijo en el XML, NUNCA @string/: "NUMERO1 ", "NUMERO 2", "+",
+  "suma", "resta", "multiplica", "divide", "Local", "Pagar". Texto de los
+  botones en minuscula.
+- La etiqueta va DEBAJO del campo: primero el EditText y despues el TextView
+  "NUMERO1 ". Luego un TextView con el simbolo (+ - * /),
+  android:textAlignment="center" y textSize 30dp (en uno de los fragments
+  se olvida el textSize).
+- EditText SIN android:hint y casi siempre sin inputType (si acaso
+  android:inputType="number").
+- Tamanos y colores fijos: contenedor de fragments
+      <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="600dp"
+          android:background="#62D528"
+          android:id="@+id/basesita"
+          />
+  y abajo un LinearLayout horizontal con 4 Buttons wrap_content de texto
+  "+", "-", "*", "/".
+- Renglon de lista basurita.xml: LinearLayout horizontal con ImageView de
+  100dp x 100dp y un LinearLayout vertical con dos TextView (textview con
+  textSize 20dp y gravity center; textview2 gravity center).
+- "/>" muchas veces en su propia linea. Indentacion a veces mal (hijos con
+  8 espacios, o un </LinearLayout> interno pegado a la izquierda).
+
+---------------------------------------------------------------------
+11. FORMATO DEL CODIGO
+---------------------------------------------------------------------
+- Llaves estilo K&R pero con espacios inconsistentes: "if (x){", "if(x){",
+  "suma(){", "getCount(){".
+- Sin espacio despues de las comas en llamadas y declaraciones:
+  replace(R.id.basesita,fragment), Button sumita,restita,mult,div;
+- Cast pegado: ((Button)v).
+- Lineas en blanco sueltas al final de los metodos y antes de cerrar la
+  clase.
+- SIN comentarios (solo el de "funcioneee c:" y los que deja la plantilla).
+  SIN Javadoc, SIN cabecera de autor, SIN "// Autor:".
+
+---------------------------------------------------------------------
+12. LISTA DE COSAS QUE NUNCA SE HACEN
+---------------------------------------------------------------------
+Kotlin, lambdas, clases anonimas, method references, switch, "else if" en
+una linea, try/catch, validar entradas, trim(), isEmpty(), revisar division
+entre cero, private/final en Activities y Adaptadores, static, constantes,
+enums, strings.xml / @string/, hint, sp, ConstraintLayout, RecyclerView,
+ViewHolder, reutilizar convertView, addToBackStack, Intents a otra Activity,
+Log, TextView de resultado, AlertDialog, Snackbar, editar Gradle, temas o
+colores, ViewBinding, DataBinding, genericos en los retornos, Javadoc,
+comentarios explicativos, cabecera de autor, @NonNull escrito a mano (solo
+el que pone el IDE), String.format, StringBuilder, streams, var.
+
+---------------------------------------------------------------------
+13. COMO SE DEBE VER LA APP TERMINADA
+---------------------------------------------------------------------
+Tema Material3 por defecto sin personalizar, campos y botones apilados con
+margenes grandes, textos en mayusculas o minusculas segun salga ("NUMERO 2",
+"suma"), botones grises de la plantilla. Si hay fragments: un bloque verde
+#62D528 de 600dp con los 4 botoncitos + - * / abajo. Toda la interaccion
+termina en un Toast. Nada de disenos bonitos, iconos propios (salvo los del
+menu), colores, animaciones ni barras personalizadas.
+
+---------------------------------------------------------------------
+14. QUE ENTREGAR
+---------------------------------------------------------------------
+Dame, archivo por archivo y con su ruta (app/src/main/java/com/example/.../X.java,
+app/src/main/res/layout/X.xml, res/menu/X.xml, res/values/themes.xml si
+cambia), el codigo COMPLETO de cada archivo que se crea o modifica, en el
+orden: clase modelo -> fragments/adaptador -> MainActivity -> layouts ->
+menu. No expliques el codigo ni agregues mejoras; solo el codigo con este
+estilo.
