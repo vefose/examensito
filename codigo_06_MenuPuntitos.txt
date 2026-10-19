@@ -1,0 +1,148 @@
+################################################################
+#  PROYECTO: 06_MenuPuntitos (practica del profe: menu de opciones con iconos)
+#  Fuente: menupuntitosnuevo1-10-26.docx.pdf (13 paginas, el codigo viene en capturas)
+#  Proyecto en Android Studio: MyAmenupuntitosnuevo  (paquete com.example.myamenupuntitosnuevo)
+#  Es la BASE de la que sale 02_OperaFragmentitos (el ejercicio ya complementado)
+################################################################
+
+==================== PASOS DE LA PRACTICA (texto del PDF) ====================
+
+1. En res/values/themes.xml quitar la palabra que esta despues de DayNight
+   (.NoActionBar), para que se vea la barra donde sale el menu.
+2. Click derecho en res -> New -> Android Resource File.
+   File name: menusito   Resource type: Menu   -> OK
+   (se crea la carpeta res/menu con menusito.xml)
+3. Buscar en internet imagenes de suma, resta, multiplicacion y division en .png
+   y pegarlas en la carpeta drawable como: sumar.png, restar.png,
+   multiplicar.png, dividir.png
+4. Teclear el codigo de menusito.xml (abajo).
+5. En MainActivity: click derecho -> Generate -> Override Methods...
+   -> Collapse all -> expandir android.app.Activity -> seleccionar
+   onCreateOptionsMenu(Menu):boolean y onOptionsItemSelected(MenuItem):boolean -> OK
+6. Capturar el codigo de MainActivity (abajo).
+7. Al dar click en el icono de suma o en "Suma" del menu de 3 puntitos sale el
+   mensaje "fue en suma" abajo (Toast).
+8. EJERCICIO: Complementa el ejercicio poniendo dos cuadros de texto y su
+   correspondiente clase y sus metodos de suma, resta, multiplicacion y
+   division; al seleccionar cualquier icono o cualquier opcion del menu
+   despliega el resultado correspondiente.
+   (Esto es lo que esta resuelto en 02_OperaFragmentitos.)
+
+
+==================== JAVA - MainActivity (pantalla principal) ====================
+( Java/MainActivity.java )
+NOTA: en la captura los imports estan colapsados ("import ..." lineas 3-13);
+      estos son los que corresponden a lo que usa el codigo + los de la plantilla.
+
+package com.example.myamenupuntitosnuevo;
+
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menusito,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()== R.id.sumita || item.getItemId()== R.id.Sumita )
+            Toast.makeText(this,"fue en suma"
+                    ,Toast.LENGTH_LONG).show();
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+
+    }
+}
+
+(Detalles tal cual la captura: el if NO lleva llaves; el ",Toast.LENGTH_LONG"
+ va en la linea de abajo empezando con la coma; los dos metodos del menu van
+ ARRIBA de onCreate porque los genero Override Methods; el bloque
+ ViewCompat.setOnApplyWindowInsetsListener de la plantilla esta borrado.)
+
+
+==================== XML - Menu de opciones ====================
+( XML/menu/menusito.xml )
+
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/sumita"
+        android:title="suma"
+        android:icon="@drawable/sumar"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/restita"
+        android:title="resta"
+        android:icon="@drawable/restar"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/multiplicadita"
+        android:title="multiplicacion"
+        android:icon="@drawable/multiplicar"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/partidita"
+        android:title="division"
+        android:icon="@drawable/dividir"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/Sumita"
+        android:title="Suma"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/Restita"
+        android:title="Resta"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/Multiplica"
+        android:title="Multiplica"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/Divide"
+        android:title="Divide"
+        app:showAsAction="ifRoom"/>
+</menu>
+
+
+==================== XML - values/themes.xml ====================
+( XML/values/themes.xml )  -> ya con ".NoActionBar" quitado
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.MyAmenupuntitosnuevo" parent="Theme.Material3.DayNight">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.MyAmenupuntitosnuevo" parent="Base.Theme.MyAmenupuntitosnuevo" />
+</resources>
+
+
+==================== XML - Layout de MainActivity ====================
+( XML/layouts/activity_main.xml )
+No se muestra en el PDF: se queda el de la plantilla (pantalla con el
+"Hello World!" en medio, como se ve en el emulador).
+
+
+==================== IMAGENES (res/drawable) ====================
+sumar.png, restar.png, multiplicar.png, dividir.png  (bajadas de internet)
